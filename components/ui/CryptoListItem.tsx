@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { TrendingUp, TrendingDown, Trophy } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -11,7 +12,7 @@ export interface CryptoListItemProps {
   variant?: "default" | "positive" | "negative";
 }
 
-export function CryptoListItem({
+export const CryptoListItem = memo(function CryptoListItem({
   name,
   subtitle,
   value,
@@ -89,4 +90,4 @@ export function CryptoListItem({
       </div>
     </li>
   );
-}
+});

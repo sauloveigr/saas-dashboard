@@ -18,7 +18,7 @@ interface RevenueChartProps {
 
 export function RevenueChart({ data, isLoading }: RevenueChartProps) {
   return (
-    <Card as="section">
+    <Card as="section" className="h-full flex flex-col">
       <header className="mb-4 sm:mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
         <div>
           <h2 className="text-base font-semibold">Price History</h2>
@@ -34,7 +34,7 @@ export function RevenueChart({ data, isLoading }: RevenueChartProps) {
         </div>
       </header>
       
-      <div className="h-64 sm:h-80">
+      <div className="flex-1 min-h-[320px]">
         {isLoading ? (
           <div className="flex h-full items-center justify-center">
             <LoadingSpinner size="lg" />

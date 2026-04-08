@@ -15,22 +15,22 @@ export function TrendingCoins({ coins, isLoading }: TrendingCoinsProps) {
   };
 
   return (
-    <Card as="section">
+    <Card as="section" className="h-full flex flex-col">
       <header className="mb-4 flex items-center gap-2">
         <Flame className="h-4 w-4 text-orange-500" />
         <h2 className="text-base font-semibold">Trending Now</h2>
       </header>
       
       {isLoading ? (
-        <div className="flex h-48 items-center justify-center">
+        <div className="flex flex-1 items-center justify-center">
           <LoadingSpinner />
         </div>
       ) : coins.length === 0 ? (
-        <div className="flex h-48 items-center justify-center">
+        <div className="flex flex-1 items-center justify-center">
           <p className="text-sm text-muted-foreground">No trending coins</p>
         </div>
       ) : (
-        <ul className="space-y-4">
+        <ul className="flex-1 space-y-4 overflow-y-auto">
           {coins.map((coin, index) => (
             <li key={coin.id} className="flex items-start gap-3">
               <div className="flex items-center gap-2">

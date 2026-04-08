@@ -5,7 +5,8 @@ import { usePathname } from "next/navigation";
 import { X } from "lucide-react";
 import { NAV_ITEMS } from "@/lib/constants/nav";
 import { appConfig } from "@/config/app";
-import { Button, Avatar } from "@/components/ui";
+import { Button } from "@/components/ui";
+import { NavLink } from "./NavLink";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -73,49 +74,18 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             </div>
           </header>
 
-          <nav className="flex-1 space-y-0.5 overflow-y-auto px-3 py-3" aria-label="Sidebar navigation">
-            {NAV_ITEMS.map((item) => {
-              const isActive = pathname === item.href;
-              const Icon = item.icon;
-
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  onClick={onClose}
-                  className={`
-                  group flex items-center gap-3 rounded-md px-3 py-2 text-xs font-medium transition-all
-                  ${
-                    isActive
-                      ? "bg-secondary text-foreground"
-                      : "text-muted-foreground hover:bg-secondary/50 hover:text-foreground"
-                  }
-                `}
-                  aria-current={isActive ? "page" : undefined}
-                >
-                  <Icon
-                    className={`h-4 w-4 shrink-0 ${
-                      isActive ? "" : "group-hover:scale-105 transition-transform"
-                    }`}
-                    aria-hidden="true"
-                  />
-                  <span>{item.name}</span>
-                </Link>
-              );
-            })}
+          <nav className="flex-1 space-y-0.5 overflow-y-auto px-3 py-3 pb-6" aria-label="Sidebar navigation">
+            {NAV_ITEMS.map((item) => (
+              <NavLink
+                key={item.name}
+                href={item.href}
+                name={item.name}
+                icon={item.icon}
+                isActive={pathname === item.href}
+                onClick={onClose}
+              />
+            ))}
           </nav>
-
-          <footer className="border-t border-border p-3">
-            <button className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-left transition-colors hover:bg-secondary/50">
-              <Avatar size="lg" />
-              <div className="flex-1 overflow-hidden">
-                <p className="truncate text-xs font-medium">John Doe</p>
-                <p className="truncate text-xs text-muted-foreground">
-                  john@acme.com
-                </p>
-              </div>
-            </button>
-          </footer>
         </div>
       </aside>
     </>

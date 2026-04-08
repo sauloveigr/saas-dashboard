@@ -1,8 +1,8 @@
 "use client";
 
-import { Search, Bell, HelpCircle, Command, Menu } from "lucide-react";
+import { Search, Command, Menu } from "lucide-react";
 import { useState } from "react";
-import { Button, Kbd, UserButton } from "@/components/ui";
+import { Button, Kbd } from "@/components/ui";
 
 interface TopbarProps {
   onMenuClick: () => void;
@@ -49,36 +49,6 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
               <span>K</span>
             </Kbd>
           </div>
-        </div>
-
-        <div className="flex items-center gap-1">
-          <Button
-            variant="icon"
-            className="hidden sm:flex"
-            aria-label="Help"
-          >
-            <HelpCircle className="h-4 w-4" />
-          </Button>
-
-          <Button
-            variant="icon"
-            className="relative"
-            aria-label="Notifications"
-          >
-            <Bell className="h-4 w-4" />
-            <span
-              className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-red-500 ring-2 ring-background"
-              aria-hidden="true"
-            />
-          </Button>
-
-          <div className="ml-2 h-5 w-px bg-border/60 hidden sm:block" aria-hidden="true" />
-
-          <UserButton
-            name="John Doe"
-            role="Admin"
-            className="ml-1"
-          />
         </div>
       </div>
     </header>

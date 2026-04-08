@@ -7,3 +7,10 @@ export {
 } from "./format";
 
 export { cn } from "./cn";
+
+export {
+  debounce,
+  throttle,
+  measurePerformance,
+  measurePerformanceAsync,
+} from "./performance";

@@ -1,10 +1,8 @@
 "use client";
 
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
 import { MetricCard } from "@/components/dashboard/MetricCard";
-import { RevenueChart } from "@/components/dashboard/RevenueChart";
-import { TrendingCoins } from "@/components/dashboard/TrendingCoins";
-import { TopProducts } from "@/components/dashboard/TopProducts";
-import { MarketMovers } from "@/components/dashboard/MarketMovers";
 import { LoadingSpinner, ErrorMessage } from "@/components/ui";
 import { 
   useTopCryptos, 
@@ -16,6 +14,51 @@ import {
 import { useDashboardStore } from "@/stores/dashboardStore";
 import { DollarSign, TrendingUp, Activity, Users } from "lucide-react";
 import { formatCurrency, formatCompactNumber } from "@/lib/utils";
+
+const RevenueChart = dynamic(
+  () => import("@/components/dashboard/RevenueChart").then((mod) => ({ default: mod.RevenueChart })),
+  {
+    loading: () => (
+      <div className="flex h-80 items-center justify-center">
+        <LoadingSpinner size="lg" />
+      </div>
+    ),
+    ssr: false,
+  }
+);
+
+const TrendingCoins = dynamic(
+  () => import("@/components/dashboard/TrendingCoins").then((mod) => ({ default: mod.TrendingCoins })),
+  {
+    loading: () => (
+      <div className="flex h-64 items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    ),
+  }
+);
+
+const TopProducts = dynamic(
+  () => import("@/components/dashboard/TopProducts").then((mod) => ({ default: mod.TopProducts })),
+  {
+    loading: () => (
+      <div className="flex h-48 items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    ),
+  }
+);
+
+const MarketMovers = dynamic(
+  () => import("@/components/dashboard/MarketMovers").then((mod) => ({ default: mod.MarketMovers })),
+  {
+    loading: () => (
+      <div className="flex h-48 items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    ),
+  }
+);
 
 export default function DashboardPage() {
   const { selectedCrypto, timeRange } = useDashboardStore();
@@ -55,14 +98,6 @@ export default function DashboardPage() {
     refetch: refetchMovers,
   } = useMarketMovers();
 
-  if (isLoadingCryptos || isLoadingChart) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <LoadingSpinner size="lg" />
-      </div>
-    );
-  }
-
   const cryptoMetrics = topCryptos
     ? topCryptos.map((crypto) => ({
         id: crypto.id,
@@ -88,6 +123,14 @@ export default function DashboardPage() {
         revenue: formatCurrency(crypto.current_price),
       }))
     : [];
+
+  if (isLoadingCryptos || isLoadingChart) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <LoadingSpinner size="lg" />
+      </div>
+    );
+  }
 
   return (
     <div className="w-full space-y-8">
@@ -119,7 +162,9 @@ export default function DashboardPage() {
       ) : (
         <div className="grid w-full gap-4 grid-cols-1 lg:grid-cols-7">
           <div className="lg:col-span-4">
-            <RevenueChart data={chartData || []} isLoading={isLoadingChart} />
+            <Suspense fallback={<LoadingSpinner size="lg" />}>
+              <RevenueChart data={chartData || []} isLoading={isLoadingChart} />
+            </Suspense>
           </div>
           <div className="lg:col-span-3">
             {trendingError ? (
@@ -128,7 +173,9 @@ export default function DashboardPage() {
                 onRetry={refetchTrending}
               />
             ) : (
-              <TrendingCoins coins={trendingCoins || []} isLoading={isLoadingTrending} />
+              <Suspense fallback={<LoadingSpinner />}>
+                <TrendingCoins coins={trendingCoins || []} isLoading={isLoadingTrending} />
+              </Suspense>
             )}
           </div>
         </div>
@@ -141,7 +188,9 @@ export default function DashboardPage() {
             onRetry={refetchTopCryptos}
           />
         ) : (
-          <TopProducts products={topProducts} isLoading={isLoadingTopCryptos} />
+          <Suspense fallback={<LoadingSpinner />}>
+            <TopProducts products={topProducts} isLoading={isLoadingTopCryptos} />
+          </Suspense>
         )}
         
         {moversError ? (
@@ -150,7 +199,9 @@ export default function DashboardPage() {
             onRetry={refetchMovers}
           />
         ) : (
-          <MarketMovers movers={marketMovers || []} isLoading={isLoadingMovers} />
+          <Suspense fallback={<LoadingSpinner />}>
+            <MarketMovers movers={marketMovers || []} isLoading={isLoadingMovers} />
+          </Suspense>
         )}
       </div>
     </div>

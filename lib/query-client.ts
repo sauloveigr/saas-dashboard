@@ -14,17 +14,17 @@ function handleError(error: unknown) {
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 60 * 1000,
-      gcTime: 5 * 60 * 1000,
+      staleTime: 5 * 60 * 1000,
+      gcTime: 10 * 60 * 1000,
       retry: (failureCount, error) => {
         if (error instanceof ApiError && error.status === 429) {
-          return failureCount < 2;
+          return false;
         }
         return failureCount < 1;
       },
       retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
-      refetchOnWindowFocus: true,
-      refetchOnMount: true,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
       refetchOnReconnect: true,
     },
   },
@@ -46,7 +46,6 @@ export const QUERY_KEYS = {
     chart: (id: string, days: string) =>
       [...QUERY_KEYS.CRYPTO.all, "chart", id, days] as const,
     global: () => [...QUERY_KEYS.CRYPTO.all, "global"] as const,
-    marketShare: () => [...QUERY_KEYS.CRYPTO.all, "market-share"] as const,
     volume: () => [...QUERY_KEYS.CRYPTO.all, "volume"] as const,
     trending: () => [...QUERY_KEYS.CRYPTO.all, "trending"] as const,
     movers: () => [...QUERY_KEYS.CRYPTO.all, "movers"] as const,

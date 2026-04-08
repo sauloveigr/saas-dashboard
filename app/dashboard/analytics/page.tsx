@@ -1,8 +1,8 @@
 "use client";
 
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
 import { AnalyticsStatCard } from "@/components/dashboard/AnalyticsStatCard";
-import { TrafficPieChart } from "@/components/charts/TrafficPieChart";
-import { PageViewsChart } from "@/components/charts/PageViewsChart";
 import { LoadingSpinner, ErrorMessage } from "@/components/ui";
 import {
   useGlobalMarketData,
@@ -10,7 +10,31 @@ import {
   useVolumeData,
 } from "@/hooks/useCryptoData";
 import { TrendingUp, DollarSign, Activity, Globe } from "lucide-react";
-import { formatCurrency, formatCompactNumber, formatPercentage } from "@/lib/utils";
+import { formatCompactNumber } from "@/lib/utils";
+
+const TrafficPieChart = dynamic(
+  () => import("@/components/charts/TrafficPieChart").then((mod) => ({ default: mod.TrafficPieChart })),
+  {
+    loading: () => (
+      <div className="flex h-80 items-center justify-center">
+        <LoadingSpinner size="lg" />
+      </div>
+    ),
+    ssr: false,
+  }
+);
+
+const PageViewsChart = dynamic(
+  () => import("@/components/charts/PageViewsChart").then((mod) => ({ default: mod.PageViewsChart })),
+  {
+    loading: () => (
+      <div className="flex h-80 items-center justify-center">
+        <LoadingSpinner size="lg" />
+      </div>
+    ),
+    ssr: false,
+  }
+);
 
 export default function AnalyticsPage() {
   const {
@@ -33,14 +57,6 @@ export default function AnalyticsPage() {
     error: volumeError,
     refetch: refetchVolume,
   } = useVolumeData();
-
-  if (isLoadingGlobal || isLoadingMarketShare || isLoadingVolume) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <LoadingSpinner size="lg" />
-      </div>
-    );
-  }
 
   const analyticsStats = globalData
     ? [
@@ -66,6 +82,14 @@ export default function AnalyticsPage() {
         },
       ]
     : [];
+
+  if (isLoadingGlobal || isLoadingMarketShare || isLoadingVolume) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <LoadingSpinner size="lg" />
+      </div>
+    );
+  }
 
   return (
     <div className="w-full space-y-8">
@@ -98,12 +122,14 @@ export default function AnalyticsPage() {
             onRetry={refetchMarketShare}
           />
         ) : (
-          <TrafficPieChart
-            data={marketShareData || []}
-            isLoading={isLoadingMarketShare}
-            title="Market Share"
-            description="Top 5 cryptocurrencies by market cap"
-          />
+          <Suspense fallback={<LoadingSpinner size="lg" />}>
+            <TrafficPieChart
+              data={marketShareData || []}
+              isLoading={isLoadingMarketShare}
+              title="Market Share"
+              description="Top 5 cryptocurrencies by market cap"
+            />
+          </Suspense>
         )}
 
         {volumeError ? (
@@ -112,12 +138,14 @@ export default function AnalyticsPage() {
             onRetry={refetchVolume}
           />
         ) : (
-          <PageViewsChart
-            data={volumeData || []}
-            isLoading={isLoadingVolume}
-            title="24h Trading Volume"
-            description="Top cryptocurrencies by volume"
-          />
+          <Suspense fallback={<LoadingSpinner size="lg" />}>
+            <PageViewsChart
+              data={volumeData || []}
+              isLoading={isLoadingVolume}
+              title="24h Trading Volume"
+              description="Top cryptocurrencies by volume"
+            />
+          </Suspense>
         )}
       </div>
     </div>

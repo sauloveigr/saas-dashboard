@@ -500,9 +500,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Your Name**
 
-- Portfolio: [your-portfolio.com](https://your-portfolio.com)
-- LinkedIn: [linkedin.com/in/yourprofile](https://linkedin.com/in/yourprofile)
-- GitHub: [@yourusername](https://github.com/yourusername)
+- Portfolio: https://saulo-veiga.vercel.app/
+- LinkedIn: https://www.linkedin.com/in/saulo-saraiva/
 
 ---
 

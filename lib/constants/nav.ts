@@ -22,7 +22,7 @@ export const NAV_ITEMS: NavItem[] = [
   },
   {
     name: "Analytics",
-    href: "/dashboard/analytics",
+    href: "/analytics",
     icon: BarChart3,
   },
 ];

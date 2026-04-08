@@ -143,7 +143,7 @@ export default function DashboardPage() {
 
       {cryptosError ? (
         <ErrorMessage
-          message={cryptosError.message || "Failed to load crypto data"}
+          message="Unable to load cryptocurrency data"
           onRetry={refetchCryptos}
         />
       ) : (
@@ -156,7 +156,7 @@ export default function DashboardPage() {
 
       {chartError ? (
         <ErrorMessage
-          message={chartError.message || "Failed to load chart data"}
+          message="Unable to load price chart data"
           onRetry={refetchChart}
         />
       ) : (
@@ -169,7 +169,7 @@ export default function DashboardPage() {
           <div className="lg:col-span-3">
             {trendingError ? (
               <ErrorMessage
-                message={trendingError.message || "Failed to load trending coins"}
+                message="Unable to load trending coins"
                 onRetry={refetchTrending}
               />
             ) : (
@@ -184,7 +184,7 @@ export default function DashboardPage() {
       <div className="grid w-full gap-4 grid-cols-1 lg:grid-cols-2">
         {topCryptosError ? (
           <ErrorMessage
-            message={topCryptosError.message || "Failed to load top cryptos"}
+            message="Unable to load top cryptocurrencies"
             onRetry={refetchTopCryptos}
           />
         ) : (
@@ -195,7 +195,7 @@ export default function DashboardPage() {
         
         {moversError ? (
           <ErrorMessage
-            message={moversError.message || "Failed to load market movers"}
+            message="Unable to load market movers"
             onRetry={refetchMovers}
           />
         ) : (

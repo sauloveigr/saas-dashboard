@@ -104,7 +104,7 @@ export default function AnalyticsPage() {
 
       {globalError ? (
         <ErrorMessage
-          message={globalError.message || "Failed to load global market data"}
+          message="Unable to load global market statistics"
           onRetry={refetchGlobal}
         />
       ) : (
@@ -118,7 +118,7 @@ export default function AnalyticsPage() {
       <div className="grid w-full gap-4 grid-cols-1 lg:grid-cols-2">
         {marketShareError ? (
           <ErrorMessage
-            message={marketShareError.message || "Failed to load market share data"}
+            message="Unable to load market share data"
             onRetry={refetchMarketShare}
           />
         ) : (
@@ -134,7 +134,7 @@ export default function AnalyticsPage() {
 
         {volumeError ? (
           <ErrorMessage
-            message={volumeError.message || "Failed to load volume data"}
+            message="Unable to load trading volume data"
             onRetry={refetchVolume}
           />
         ) : (

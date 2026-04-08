@@ -8,7 +8,16 @@ interface ErrorMessageProps {
   className?: string;
 }
 
-export function ErrorMessage({ message, onRetry, className }: ErrorMessageProps) {
+export function ErrorMessage({ 
+  message, 
+  onRetry, 
+  className,
+}: ErrorMessageProps) {
+  const isRateLimitError = message.toLowerCase().includes('429') || 
+                          message.toLowerCase().includes('rate limit') ||
+                          message.toLowerCase().includes('failed to fetch') ||
+                          message.toLowerCase().includes('unable to load');
+
   return (
     <Card
       className={cn(
@@ -17,7 +26,14 @@ export function ErrorMessage({ message, onRetry, className }: ErrorMessageProps)
       )}
     >
       <AlertCircle className="h-8 w-8 text-red-500 mb-3" />
-      <p className="text-sm text-muted-foreground mb-3">{message}</p>
+      <p className="text-sm font-medium text-foreground mb-1">{message}</p>
+      
+      {isRateLimitError && (
+        <p className="text-xs text-muted-foreground mt-1 mb-3 max-w-md">
+          Due to API rate limits. Wait 1-2 minutes and try again.
+        </p>
+      )}
+      
       {onRetry && (
         <Button onClick={onRetry} size="sm" variant="ghost">
           Try again

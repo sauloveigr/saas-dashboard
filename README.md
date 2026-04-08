@@ -498,7 +498,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👤 Author
 
-**Your Name**
+**Saulo Veiga**
 
 - Portfolio: https://saulo-veiga.vercel.app/
 - LinkedIn: https://www.linkedin.com/in/saulo-saraiva/

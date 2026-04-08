@@ -2,13 +2,14 @@
 
 ## Overview
 
-This document explains the architectural decisions and patterns used in this SaaS dashboard application.
+This document explains the architectural decisions and patterns used in this Crypto Dashboard application.
 
 ---
 
 ## 📁 Directory Structure
 
 ### `/app` - Next.js App Router
+
 ```
 app/
 ├── dashboard/
@@ -36,6 +37,7 @@ components/
 ```
 
 **Hierarchy:**
+
 1. **layout/** - Shell components (used once per layout)
 2. **ui/** - Primitive, reusable building blocks
 3. **charts/** - Data visualization components
@@ -54,14 +56,16 @@ types/
 ```
 
 **Rules:**
+
 - All interfaces/types live here
 - Organized by feature/domain
 - Exported through index.ts
 - Use `type` keyword for type aliases, `interface` for object shapes
 
 **Example:**
+
 ```typescript
-import type { Metric, Transaction } from "@/types";
+import type {Metric, Transaction} from '@/types';
 ```
 
 ---
@@ -77,13 +81,14 @@ data/
 **Purpose:** Temporary mock data for development/testing.
 
 **Migration Path:**
+
 ```typescript
 // Phase 1: Mock data (current)
-import { mockMetrics } from "@/data/dashboard-data";
+import {mockMetrics} from '@/data/dashboard-data';
 
 // Phase 2: API integration (future)
-import { useDashboardMetrics } from "@/lib/hooks/use-dashboard-data";
-const { data: metrics, loading, error } = useDashboardMetrics();
+import {useDashboardMetrics} from '@/lib/hooks/use-dashboard-data';
+const {data: metrics, loading, error} = useDashboardMetrics();
 ```
 
 ---
@@ -102,6 +107,7 @@ lib/
 ```
 
 **Guidelines:**
+
 - **utils/** - Pure functions, no React/side effects
 - **hooks/** - React hooks for stateful logic
 - **constants/** - Read-only data that doesn't change
@@ -117,15 +123,17 @@ config/
 ```
 
 **Purpose:** Centralized configuration for:
+
 - Environment variables
 - Feature flags
 - App constants
 - Theme settings
 
 **Usage:**
+
 ```typescript
-import { appConfig } from "@/config/app";
-import { dashboardConfig } from "@/config/dashboard";
+import {appConfig} from '@/config/app';
+import {dashboardConfig} from '@/config/dashboard';
 ```
 
 ---
@@ -138,16 +146,17 @@ Using CSS custom properties for theming:
 
 ```css
 :root {
-  --background: 0 0% 100%;
-  --foreground: 0 0% 9%;
-  --muted: 0 0% 98%;
-  --border: 0 0% 89.8%;
-  --primary: 0 0% 9%;
-  /* ... */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 9%;
+    --muted: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --primary: 0 0% 9%;
+    /* ... */
 }
 ```
 
 **Benefits:**
+
 - Easy theme switching
 - Consistent colors
 - Dark mode ready
@@ -155,6 +164,7 @@ Using CSS custom properties for theming:
 ### Spacing Scale
 
 Following Tailwind's spacing scale:
+
 - `gap-4` = 1rem (16px)
 - `p-4` = 1rem padding
 - `sm:p-6` = 1.5rem on small screens+
@@ -166,40 +176,40 @@ Following Tailwind's spacing scale:
 ### Format Utilities
 
 ```typescript
-import { formatCurrency, formatNumber, formatPercentage } from "@/lib/utils";
+import {formatCurrency, formatNumber, formatPercentage} from '@/lib/utils';
 
 // Currency
-formatCurrency(1234.56)        // "$1,234.56"
-formatCurrency(999999)         // "$999,999"
+formatCurrency(1234.56); // "$1,234.56"
+formatCurrency(999999); // "$999,999"
 
 // Numbers
-formatNumber(1234567)          // "1,234,567"
-formatCompactNumber(1500)      // "1.5K"
-formatCompactNumber(2500000)   // "2.5M"
+formatNumber(1234567); // "1,234,567"
+formatCompactNumber(1500); // "1.5K"
+formatCompactNumber(2500000); // "2.5M"
 
 // Percentages
-formatPercentage(12.5)         // "+12.5%"
-formatPercentage(-3.2)         // "-3.2%"
+formatPercentage(12.5); // "+12.5%"
+formatPercentage(-3.2); // "-3.2%"
 
 // Dates
-formatRelativeTime(new Date()) // "just now"
+formatRelativeTime(new Date()); // "just now"
 ```
 
 ### Class Name Utility
 
 ```typescript
-import { cn } from "@/lib/utils";
+import {cn} from '@/lib/utils';
 
 // Merge classes
-cn("px-4 py-2", "bg-blue-500")
+cn('px-4 py-2', 'bg-blue-500');
 // → "px-4 py-2 bg-blue-500"
 
 // Conditional classes
-cn("px-4", isActive && "bg-blue-500")
+cn('px-4', isActive && 'bg-blue-500');
 // → "px-4 bg-blue-500" (if isActive is true)
 
 // Override Tailwind classes
-cn("px-2", "px-4")
+cn('px-2', 'px-4');
 // → "px-4" (later class wins)
 ```
 
@@ -212,33 +222,33 @@ cn("px-2", "px-4")
 ```typescript
 // ✅ Good - Typed prop
 interface MetricCardProps {
-  metric: Metric;
+    metric: Metric;
 }
 
-function MetricCard({ metric }: MetricCardProps) {
-  // metric.id      ✅ Type-safe
-  // metric.foo     ❌ TypeScript error
+function MetricCard({metric}: MetricCardProps) {
+    // metric.id      ✅ Type-safe
+    // metric.foo     ❌ TypeScript error
 }
 
 // ✅ Good - Typed data
 const metrics: Metric[] = mockMetrics;
 
 // ❌ Bad - Untyped
-const metrics = [{ foo: "bar" }];
+const metrics = [{foo: 'bar'}];
 ```
 
 ### Type Imports
 
 ```typescript
 // ✅ Good - Type-only import
-import type { Metric } from "@/types";
+import type {Metric} from '@/types';
 
 // ⚠️ OK but less clear
-import { Metric } from "@/types";
+import {Metric} from '@/types';
 
 // ❌ Bad - Direct interface in component
 interface Metric {
-  // ...
+    // ...
 }
 ```
 
@@ -247,6 +257,7 @@ interface Metric {
 ## 🧪 Testing Strategy (Future)
 
 ### Structure:
+
 ```
 __tests__/
 ├── components/
@@ -258,14 +269,15 @@ __tests__/
 ```
 
 ### Example Test:
+
 ```typescript
 // __tests__/lib/utils/format.test.ts
-import { formatCurrency } from "@/lib/utils";
+import {formatCurrency} from '@/lib/utils';
 
-describe("formatCurrency", () => {
-  it("formats USD correctly", () => {
-    expect(formatCurrency(1234.56)).toBe("$1,234.56");
-  });
+describe('formatCurrency', () => {
+    it('formats USD correctly', () => {
+        expect(formatCurrency(1234.56)).toBe('$1,234.56');
+    });
 });
 ```
 
@@ -274,11 +286,13 @@ describe("formatCurrency", () => {
 ## 🚀 Performance Considerations
 
 ### Current:
+
 - ✅ Client-side rendering for interactive components
 - ✅ Responsive charts with proper sizing
 - ✅ Minimal bundle size
 
 ### Future Optimizations:
+
 ```typescript
 // Dynamic imports for heavy components
 const RevenueChart = dynamic(
@@ -298,11 +312,13 @@ import { VirtualList } from "@/components/ui/virtual-list";
 ## 🔄 Data Flow
 
 ### Current (Development):
+
 ```
 Mock Data (data/) → Component → UI
 ```
 
 ### Future (Production):
+
 ```
 API → React Query → Custom Hook → Component → UI
          ↓
@@ -310,6 +326,7 @@ API → React Query → Custom Hook → Component → UI
 ```
 
 ### Example Future Flow:
+
 ```typescript
 // lib/api/dashboard.ts
 export async function fetchMetrics(): Promise<Metric[]> {
@@ -329,10 +346,10 @@ export function useDashboardData() {
 // Component
 export default function DashboardPage() {
   const { data: metrics, isLoading, error } = useDashboardData();
-  
+
   if (isLoading) return <Skeleton />;
   if (error) return <ErrorState />;
-  
+
   return <>{/* Render with metrics */}</>;
 }
 ```
@@ -342,6 +359,7 @@ export default function DashboardPage() {
 ## 📋 Code Conventions
 
 ### Naming:
+
 - **Components:** PascalCase (`MetricCard.tsx`)
 - **Files:** kebab-case (`dashboard-data.ts`)
 - **Functions:** camelCase (`formatCurrency`)
@@ -349,16 +367,17 @@ export default function DashboardPage() {
 - **Types:** PascalCase (`Metric`, `Transaction`)
 
 ### File Organization:
+
 ```typescript
 // 1. Imports - external first, then internal
-import React from "react";
-import { useQuery } from "@tanstack/react-query";
-import { formatCurrency } from "@/lib/utils";
-import type { Metric } from "@/types";
+import React from 'react';
+import {useQuery} from '@tanstack/react-query';
+import {formatCurrency} from '@/lib/utils';
+import type {Metric} from '@/types';
 
 // 2. Types/Interfaces
 interface ComponentProps {
-  // ...
+    // ...
 }
 
 // 3. Constants (if needed in file)
@@ -366,20 +385,21 @@ const DEFAULT_VALUE = 10;
 
 // 4. Component/Function
 export default function Component() {
-  // ...
+    // ...
 }
 ```
 
 ### Export Patterns:
+
 ```typescript
 // ✅ Good - Named export for utils
-export function formatCurrency() { }
+export function formatCurrency() {}
 
 // ✅ Good - Default export for components
-export default function MetricCard() { }
+export default function MetricCard() {}
 
 // ✅ Good - Type-only export
-export type { Metric };
+export type {Metric};
 ```
 
 ---
@@ -387,6 +407,7 @@ export type { Metric };
 ## 🌐 Environment Variables
 
 ### Setup:
+
 ```bash
 # .env.local (not committed)
 NEXT_PUBLIC_APP_URL=http://localhost:3000
@@ -394,13 +415,14 @@ NEXT_PUBLIC_API_URL=https://api.example.com
 ```
 
 ### Usage:
+
 ```typescript
 // config/app.ts
 export const appConfig = {
-  url: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
-  api: {
-    baseUrl: process.env.NEXT_PUBLIC_API_URL || "/api",
-  },
+    url: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+    api: {
+        baseUrl: process.env.NEXT_PUBLIC_API_URL || '/api',
+    },
 };
 ```
 

@@ -6,8 +6,8 @@ import { Providers } from "./providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "SaaS Dashboard",
-  description: "Modern SaaS dashboard with Next.js and Tailwind CSS",
+  title: "Crypto Dashboard",
+  description: "Modern Crypto Dashboard with Next.js and Tailwind CSS",
 };
 
 export default function RootLayout({

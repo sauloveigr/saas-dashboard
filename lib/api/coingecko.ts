@@ -5,6 +5,12 @@ import type {
   TimeRange,
   GlobalMarketData,
 } from "@/types/crypto";
+import {
+  provideMarketData,
+  provideChartData,
+  provideGlobalData,
+  provideTrendingData,
+} from "@/lib/services/crypto-data-provider";
 
 export interface GetMarketsParams {
   vs_currency?: string;
@@ -42,8 +48,12 @@ export async function getMarkets(
     queryParams.append("ids", ids.join(","));
   }
 
-  return apiClient<CryptoMarketData[]>(
-    `${API_ENDPOINTS.MARKETS}?${queryParams.toString()}`
+  return provideMarketData(
+    () =>
+      apiClient<CryptoMarketData[]>(
+        `${API_ENDPOINTS.MARKETS}?${queryParams.toString()}`
+      ),
+    params
   );
 }
 
@@ -62,8 +72,12 @@ export async function getMarketChart(
     queryParams.append("interval", interval);
   }
 
-  return apiClient<CryptoChartData>(
-    `${API_ENDPOINTS.MARKET_CHART(coinId)}?${queryParams.toString()}`
+  return provideChartData(
+    () =>
+      apiClient<CryptoChartData>(
+        `${API_ENDPOINTS.MARKET_CHART(coinId)}?${queryParams.toString()}`
+      ),
+    coinId
   );
 }
 
@@ -84,7 +98,7 @@ export async function getTopCryptosByMarketCap(
 }
 
 export async function getGlobalMarketData(): Promise<GlobalMarketData> {
-  return apiClient<GlobalMarketData>("/global");
+  return provideGlobalData(() => apiClient<GlobalMarketData>("/global"));
 }
 
 export async function getTopCryptosByVolume(
@@ -97,7 +111,9 @@ export async function getTopCryptosByVolume(
 }
 
 export async function getTrendingCoins(): Promise<import("@/types/crypto").TrendingResponse> {
-  return apiClient<import("@/types/crypto").TrendingResponse>("/search/trending");
+  return provideTrendingData(() =>
+    apiClient<import("@/types/crypto").TrendingResponse>("/search/trending")
+  );
 }
 
 export async function getTopGainersLosers(): Promise<CryptoMarketData[]> {

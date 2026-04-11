@@ -16,6 +16,18 @@ export const appConfig = {
     },
 
     /**
+     * Mock data configuration
+     * Mock data is ONLY used as fallback when API fails
+     * API is always tried first
+     */
+    mockData: {
+        fallbackOnError: true,
+        fallbackOnTimeout: true,
+        timeoutMs: 15000,
+        logFallbacks: process.env.NODE_ENV === 'development',
+    },
+
+    /**
      * Feature flags
      */
     features: {
